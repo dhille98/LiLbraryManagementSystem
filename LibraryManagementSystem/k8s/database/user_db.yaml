@@ -1,0 +1,62 @@
+--- 
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: user-sts
+spec:
+  selector:
+    matchLabels:
+      app: usersdb
+      version: v1.0
+  serviceName: <ServiceName>
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: usersdb
+        version: v1.0
+    spec:
+      containers:
+      - name: usersdb
+        image: postgres:15-alpine
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+          - name: POSTGRES_USER
+            value: user
+          - name: POSTGRES_PASSWORD
+            value: password
+          - name: POSTGRES_DB
+            value: usersdb
+        resources:
+            requests:
+              memory: 24M
+              cpu: 100m
+            limits:
+              memory: 128M
+              cpu: 500m
+#        volumeMounts:
+#        - name: www
+#          mountPath: /usr/share/nginx/html
+#  volumeClaimTemplates:
+#  - metadata:
+#      name: www
+#    spec:
+#      accessModes: [ "ReadWriteOnce" ]
+#      resources:
+#        requests:
+#          storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-db
+spec:
+  type: ClusterIP
+  selector:
+    db: usersdb
+  ports:
+    - port: 5432
+      targetPort: 5432
