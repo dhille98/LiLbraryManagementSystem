@@ -1,9 +1,13 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: users-service
+  annotations:
+    kubernetes.io/change-cause: "version v1.0"
 spec:
   minReadySeconds: 5
+  replicas: 1
   selector:
     matchLabels:
       app: users-svc
@@ -13,21 +17,19 @@ spec:
         app: users-svc
     spec:
       containers:
-      - name: users-svc-con
-        image: shaikkhajaibrahim/libuserssvc:1.0
-        resources:
-          requests:
-            memory: 64M
-            cpu: 200m
-          limits:
-            memory: 128M
-            cpu: 500m
-        env:
-          - name: SECRET_KEY
-            value: 'YtDEVWnL35aAIP-5yxeLjAZ49R920-mMNDfwPyWULu63HFsYzo0f-LO2InxC8eu428k'
-          - name: DATABASE_URL
-            value: "postgresql://user:password@usersdb-0.usersdb-svc:5432/usersdb"
-        ports:
+        - name: users-service
+          image: shaikkhajaibrahim/libuserssvc:1.0
+          resources:
+            requests:
+              memory: 24M
+              cpu: 100m
+            limits:
+              memory: 128M
+              cpu: 250m
+          envFrom:
+            - secretRef:
+                name: users-svc-secrets
+          ports:
           - containerPort: 8000
 ---
 apiVersion: v1

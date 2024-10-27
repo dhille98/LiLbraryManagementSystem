@@ -21,7 +21,7 @@ spec:
     matchLabels:
       db: books
   serviceName: usersdb-svc
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -33,23 +33,19 @@ spec:
         ports:
         - containerPort: 5432
           name: postgres
-        env:
-          - name: POSTGRES_USER
-            value: user
-          - name: POSTGRES_PASSWORD
-            value: password
-          - name: POSTGRES_DB
-            value: usersdb
+        envFrom:
+          - secretRef: users-db-secrets
         resources:
             requests:
-              memory: 24M
+              memory: 100Mi
               cpu: 100m
             limits:
-              memory: 128M
-              cpu: 500m
+              memory: 250Mi
+              cpu: 250m
         volumeMounts:
         - name: user-pvc
-          mountPath: /usr/share/nginx/html
+          mountPath: /var/lib/postgres/data
+          subpath: data
   volumeClaimTemplates:
   - metadata:
       name: user-pvc
