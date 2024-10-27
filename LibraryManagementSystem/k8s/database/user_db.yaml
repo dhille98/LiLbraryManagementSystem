@@ -7,7 +7,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   selector:
-    db: booksdb
+    db: users
   ports:
     - port: 5432
       targetPort: 5432
@@ -19,13 +19,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      db: books
+      db: users
   serviceName: usersdb-svc
   replicas: 1
   template:
     metadata:
       labels:
-        db: books
+        db: users
     spec:
       containers:
       - name: usersdb
@@ -34,7 +34,7 @@ spec:
         - containerPort: 5432
           name: postgres
         envFrom:
-          - secretRef: 
+          - secretRef:
               name: users-db-secrets
         resources:
             requests:
