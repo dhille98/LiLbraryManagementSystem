@@ -5,7 +5,7 @@ metadata:
   name: booksdb-svc
 spec:
   type: ClusterIP
-  clusterIp: None
+  clusterIP: None
   selector:
     db: books
   ports:
