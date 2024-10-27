@@ -21,7 +21,7 @@ spec:
     matchLabels:
       db: books
   serviceName: usersdb-svc
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
