@@ -45,8 +45,8 @@ spec:
               cpu: 250m
         volumeMounts:
         - name: books-pvc
-          mountPath: /var/lib/postgres/data
-          subpath: data
+          mountPath: /var/lib/postgresql/data
+          subPath: data
   volumeClaimTemplates:
   - metadata:
       name: books-pvc
