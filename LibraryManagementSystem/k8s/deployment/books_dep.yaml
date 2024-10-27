@@ -22,12 +22,12 @@ spec:
           limits:
             memory: 128M
             cpu: 500m
-          env:
-            - name: SECRET_KEY
-              value: 'YtDEVWnL35aAIP-5yxeLjAZ49R920-mMNDfwPyWULu63HFsYzo0f-LO2InxC8eu428k'
-            - name: DATABASE_URL
-              value: "postgresql://user:password@books-db-0.booksdb-svc:5432/booksdb"
-          ports:
+        env:
+          - name: SECRET_KEY
+            value: 'YtDEVWnL35aAIP-5yxeLjAZ49R920-mMNDfwPyWULu63HFsYzo0f-LO2InxC8eu428k'
+          - name: DATABASE_URL
+            value: "postgresql://user:password@books-db-0.booksdb-svc:5432/booksdb"
+        ports:
             - containerPort: 8000
 
 ---
