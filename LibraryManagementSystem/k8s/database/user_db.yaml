@@ -34,7 +34,8 @@ spec:
         - containerPort: 5432
           name: postgres
         envFrom:
-          - secretRef: users-db-secrets
+          - secretRef: 
+              name: users-db-secrets
         resources:
             requests:
               memory: 100Mi
