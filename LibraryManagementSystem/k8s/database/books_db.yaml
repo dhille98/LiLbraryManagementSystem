@@ -9,53 +9,53 @@ spec:
   selector:
     db: books
   ports:
-    - port: 5432
-      targetPort: 5432
---- 
+  - port: 5432
+    targetPort: 5432
+
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: booksdb
 spec:
+  minReadySeconds: 5
+  replicas: 1
   selector:
     matchLabels:
       db: books
   serviceName: booksdb-svc
-  replicas: 1
   template:
     metadata:
       labels:
         db: books
     spec:
       containers:
-      - name: booksdb
-        image: postgres:15-alpine
-        ports:
-        - containerPort: 5432
-          name: postgres
-        envFrom:
-          - secretRef:
-              name: books-db-secrets
-        resources:
+        - image: postgres:15-alpine
+          name: booksdb
+          envFrom:
+            - secretRef:
+                name: books-db-secrets
+          resources:
             requests:
-              memory: 100Mi
-              cpu: 200m
+              memory: 64M
+              cpu: 100m
             limits:
-              memory: 250Mi
-              cpu: 250m
-        volumeMounts:
-        - name: books-pvc
-          mountPath: /var/lib/postgresql/data
-          subPath: data
+              memory: 256M
+              cpu: 500m
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: booksdb-vol
+              mountPath: /var/lib/postgresql/data
+              subPath: data
   volumeClaimTemplates:
-  - metadata:
-      name: books-pvc
-    spec:
-      accessModes: 
-        - ReadWriteOnce
-      storageClassName: managed
-      resources:
-        requests:
-          storage: 1Gi
-
-
+    - metadata:
+        name: booksdb-vol
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: managed
+        resources:
+          requests:
+            storage: 1Gi
+ 
